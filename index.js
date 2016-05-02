@@ -38,7 +38,7 @@ const metals = require('./corpora/data/materials/metals').metals
 
 const animals = require('./corpora/data/animals/common').animals
 const appliances = require('./corpora/data/technology/appliances').appliances
-const colors = require('./corpora/data/colors/web_colors').colors.map(c => c.color)
+const colors = require('./corpora/data/colors/web_colors').colors.map(c => c.color.split(/(?=[A-Z])/).join(' '))
 const flowers = require('./corpora/data/plants/flowers').flowers
 const monsters = require('./corpora/data/mythology/monsters').names
 const rooms = require('./corpora/data/architecture/rooms').rooms
