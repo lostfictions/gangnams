@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Gang Nams</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    @import url(http://fonts.googleapis.com/css?family=Permanent+Marker);
+
+    body {
+      background: #000;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .victory {
+      /*position: relative;*/
+      font-family: 'Permanent Marker', cursive;
+      font-variant:small-caps;
+      transform: skew(-15deg,-15deg);
+      -webkit-transform: skew(-15deg,-15deg);
+      /*padding-left: 80px;*/
+      background-image: linear-gradient(#FF0FF8 0%,  #F9F9F7 100%);
+      background-image: -webkit-linear-gradient(#FF0FF8 0%,  #F9F9F7 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /*margin: 0;*/
+      filter: drop-shadow(2px 2px 20px #f008b7);
+      -webkit-filter: drop-shadow(2px 2px 20px #f008b7);
+      text-align: center;
+    }
+
+    .victory .sm {
+      display: inherit;
+      font-size: 120px;
+    }
+
+    .victory .lg {
+      display: inherit;
+      font-size: 160px;
+    }
+
+    .victory:before {
+      content: '-';
+      position: absolute;
+      bottom: -98px;
+      left: 254px;
+      background-image: linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
+      background-image: -webkit-linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      text-shadow: 70px -7px #F3C8F3;
+    }
+
+    .victory:after {
+      content: '-';
+      position: absolute;
+      bottom: -85px;
+      left: 395px;
+      background-image: linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
+      background-image: -webkit-linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      text-shadow: 70px -5px #F3C8F3;
+    }
+
+    .helper {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <button class="helper">New Name!</button>
+  <div id="wrapper">
+    <h1 class="victory">
+      <span class="sm"></span>
+      <span class="lg"></span>
+    </h1>
+  </div>
+</body>
+
+<script src="bundle.js"></script>
+<script>
+  var sm = document.querySelector('.victory .sm');
+  var lg = document.querySelector('.victory .lg');
+
+  function newName() {
+    var name = gangName();
+
+    sm.innerHTML = name.slice(0, 2).join(' ');
+    lg.innerHTML = name[2];
+  }
+
+  var b = document.querySelector('.helper');
+  b.onclick = newName;
+
+  newName();
+</script>
+
+</html>
