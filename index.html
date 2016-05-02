@@ -8,28 +8,37 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    /* Based on an example from http://codepen.io/boldfacedesign/pen/EoGgD */
+
     @import url(http://fonts.googleapis.com/css?family=Permanent+Marker);
 
     body {
       background: #000;
       color: #fff;
-      position: relative;
+      position: absolute;
       overflow: hidden;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     #wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
+      max-width: 600px;
     }
 
     .victory {
-      /*position: relative;*/
       font-family: 'Permanent Marker', cursive;
       font-variant:small-caps;
       transform: skew(-15deg,-15deg);
       -webkit-transform: skew(-15deg,-15deg);
-      /*padding-left: 80px;*/
+      padding: 100px 80px;
       background-image: linear-gradient(#FF0FF8 0%,  #F9F9F7 100%);
       background-image: -webkit-linear-gradient(#FF0FF8 0%,  #F9F9F7 100%);
       background-clip: text;
@@ -41,42 +50,29 @@
       text-align: center;
     }
 
+    .victory .xs {
+      font-size: 55px;
+      margin-right: 20px;
+      line-height: 0;
+      vertical-align: 20px;
+    }
+
     .victory .sm {
-      display: inherit;
-      font-size: 120px;
+      font-size: 100px;
+      line-height: 0.1;
     }
 
     .victory .lg {
       display: inherit;
       font-size: 160px;
-    }
-
-    .victory:before {
-      content: '-';
-      position: absolute;
-      bottom: -98px;
-      left: 254px;
-      background-image: linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
-      background-image: -webkit-linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      text-shadow: 70px -7px #F3C8F3;
-    }
-
-    .victory:after {
-      content: '-';
-      position: absolute;
-      bottom: -85px;
-      left: 395px;
-      background-image: linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
-      background-image: -webkit-linear-gradient(#F3C8F3 0%, #F3C8F3 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      text-shadow: 70px -5px #F3C8F3;
+      line-height: 0.8;
+      margin-top: -26px;
     }
 
     .helper {
       position: absolute;
+      background-color: #333;
+      color: #999;
       top: 10px;
       left: 10px;
     }
@@ -84,9 +80,10 @@
 </head>
 
 <body>
-  <button class="helper">New Name!</button>
+  <button class="helper">Another!</button>
   <div id="wrapper">
     <h1 class="victory">
+      <span class="xs"></span>
       <span class="sm"></span>
       <span class="lg"></span>
     </h1>
@@ -95,13 +92,15 @@
 
 <script src="bundle.js"></script>
 <script>
+  var xs = document.querySelector('.victory .xs');
   var sm = document.querySelector('.victory .sm');
   var lg = document.querySelector('.victory .lg');
 
   function newName() {
     var name = gangName();
 
-    sm.innerHTML = name.slice(0, 2).join(' ');
+    xs.innerHTML = name[0];
+    sm.innerHTML = name[1];
     lg.innerHTML = name[2];
   }
 
