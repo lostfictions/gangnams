@@ -96,6 +96,7 @@ const corpora = {
   monsters: require('./corpora/data/mythology/monsters').names,
   nouns: require('./corpora/data/words/nouns').nouns,
   objects: require('./corpora/data/objects/objects').objects.filter(o => o.split(' ').length < 3),
+  occupations: require('./corpora/data/humans/occupations').occupations.filter(o => o.split(' ').length < 3),
   religionNouns: customCorpora.religionNouns,
   rooms: require('./corpora/data/architecture/rooms').rooms,
   vegetables: require('./corpora/data/foods/vegetables').vegetables
@@ -109,8 +110,8 @@ for(const c in corpora) {
 const getArticle = weighted(
   [
     ['The', 1],
-    ['Los', 0.1],
-    ['Les', 0.1]
+    ['Los', 0.07],
+    ['Les', 0.08]
   ]
 )
 
@@ -135,9 +136,10 @@ const getName = weighted(
     [corpora.animals, 1],
     [corpora.appliances, 0.1],
     [corpora.flowers, 0.2],
-    [corpora.monsters, 1],
+    [corpora.monsters, 1.1],
     [corpora.nouns, 0.7],
-    [corpora.objects, 0.7],
+    [corpora.objects, 0.6],
+    [corpora.occupations, 1.2],
     [corpora.religionNouns, 0.2],
     [corpora.rooms, 0.1],
     [corpora.vegetables, 0.3]
@@ -145,7 +147,7 @@ const getName = weighted(
 )
 
 const gangName = () => {
-  const descriptor = maybe(r(getDescriptor()), 0.9)
+  const descriptor = maybe(r(getDescriptor()), 0.86)
 
   const name = maybe(
     pluralize(r(getName())),
