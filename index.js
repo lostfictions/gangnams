@@ -103,6 +103,7 @@ const article = weighted(
   [
     ['The', 1],
     ['Los', 0.1],
+    ['Les', 0.1],
     ['', 0.3]
   ]
 )

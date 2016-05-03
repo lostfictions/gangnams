@@ -40,13 +40,11 @@
     }
 
     .victory {
+      white-space: nowrap;
       font-family: 'Permanent Marker', cursive;
       font-variant:small-caps;
       transform: skew(-15deg,-15deg);
-      padding: 100px 80px;
-      /*filter: drop-shadow(2px 2px 20px #f008b7);*/
-      -webkit-filter: drop-shadow(2px 2px 20px #f008b7);
-      background-image: linear-gradient(#FF0FF8 0%,  #F9F9F7 100%);
+      padding: 25vmin 20vmin;
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -55,22 +53,34 @@
 
     .victory .xs {
       font-size: 8vmin;
-      margin-right: 20px;
-      line-height: 0;
-      vertical-align: 20px;
+      margin-right: 2vmin;
+      vertical-align: 3vmin;
     }
 
     .victory .sm {
       font-size: 15vmin;
-      line-height: 0.1;
+      line-height: 8vmin;
+      margin-top: -1vmin;
     }
 
     .victory .lg {
+      white-space: normal;
       display: inherit;
       font-size: 25vmin;
       line-height: 0.8;
-      margin-top: -26px;
+      margin-top: -3vmin;
     }
+
+    .victory .sm::first-line {
+      /*line-height: 8vmin;*/
+      /*margin-top: -1vmin;*/
+    }
+
+    .victory .lg::first-line {
+      /*line-height: 20;*/
+      /*margin-top: -3vmin;*/
+    }
+
 
     .helper {
       position: absolute;
@@ -130,7 +140,7 @@
     hist.push({ name: gName, col: col })
 
     gName = gangName();
-    col = Please.make_color();
+    col = Please.make_color({saturation: 1});
 
     xs.innerHTML = gName[0];
     sm.innerHTML = gName[1];
@@ -154,7 +164,7 @@
   }
 
   function setColor(color) {
-    styleParent.style.webkitFilter = 'drop-shadow(2px 2px 20px ' + color + ')';
+    styleParent.style.webkitFilter = 'drop-shadow(1vmin 1vmin 5vmin ' + color + ')';
     styleParent.style.backgroundImage = 'linear-gradient(' + color + ' 0%,  #F9F9F7 100%)';
   }
 
