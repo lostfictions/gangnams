@@ -111,7 +111,7 @@ const getArticle = weighted(
   [
     ['The', 1],
     ['Los', 0.07],
-    ['Les', 0.08]
+    ['Les', 0.03]
   ]
 )
 
@@ -156,7 +156,7 @@ const gangName = () => {
 
   const article = maybe(
     getArticle(),
-    descriptor.length > 0 && name.length > 0 ? 0.8 : 0.95
+    descriptor.length > 0 && name.length > 0 ? 0.9 : 0.96
   )
 
   return [article, descriptor, name]
