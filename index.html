@@ -129,6 +129,18 @@
     hist.push({ name: gName, col: col })
 
     gName = gangName();
+
+    //Use the bigger font size if words are missing
+    if(gName[2] === '') {
+      gName[2] = gName[1];
+      gName[1] = gName[0];
+      gName[0] = '';
+    }
+    else if(gName[1] === '') {
+      gName[1] = gName[0];
+      gName[0] = '';
+    }
+
     col = Please.make_color({saturation: 1});
 
     xs.innerHTML = gName[0];

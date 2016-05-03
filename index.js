@@ -6,8 +6,10 @@ const pluralize = require('pluralize')
 const r = (arr) => arr[Math.floor(Math.random() * arr.length)]
 const uniq = (arr) => arr.filter((value, i, self) => self.indexOf(value) === i)
 
+const maybe = (word, weight) => Math.random() < weight ? word : ''
+
 const upper = (str) => str[0].toUpperCase() + str.slice(1)
-const upperAll = (str) => str.split(' ').map(upper).join(' ').split('-').map(upper).join('-')
+const upperAll = (str) => str.trim().split(' ').map(upper).join(' ').split('-').map(upper).join('-')
 
 const weighted = (weights) => {
   const totalWeight = weights.reduce((p, c) => p + c[1], 0)
@@ -99,17 +101,21 @@ const corpora = {
   vegetables: require('./corpora/data/foods/vegetables').vegetables
 }
 
-const article = weighted(
+for(const c in corpora) {
+  // console.log(c + ' ' + corpora[c].length)
+  corpora[c] = corpora[c].map(upperAll)
+}
+
+const getArticle = weighted(
   [
     ['The', 1],
     ['Los', 0.1],
-    ['Les', 0.1],
-    ['', 0.3]
+    ['Les', 0.1]
   ]
 )
 
 
-const descriptor = weighted(
+const getDescriptor = weighted(
   [
     [corpora.adjectives, 1.3],
     [corpora.colors, 0.8],
@@ -124,7 +130,7 @@ const descriptor = weighted(
   ]
 )
 
-const name = weighted(
+const getName = weighted(
   [
     [corpora.animals, 1],
     [corpora.appliances, 0.1],
@@ -138,7 +144,21 @@ const name = weighted(
   ]
 )
 
-const gangName = () => [article(), upperAll(r(descriptor())), upperAll(pluralize(r(name())))]
+const gangName = () => {
+  const descriptor = maybe(r(getDescriptor()), 0.9)
+
+  const name = maybe(
+    pluralize(r(getName())),
+    descriptor.length > 0 ? 0.95 : 1
+  )
+
+  const article = maybe(
+    getArticle(),
+    descriptor.length > 0 && name.length > 0 ? 0.8 : 0.95
+  )
+
+  return [article, descriptor, name]
+}
 
 if(typeof window !== 'undefined') {
   window.gangName = gangName
