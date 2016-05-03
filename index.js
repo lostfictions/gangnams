@@ -1,9 +1,9 @@
-/*eslint semi: ["error", "never"]*/
-'use strict'
+/*eslint semi: ["error", "never"], strict: 0*/
+'use strict' //needed if running in node without transcode
 
 const pluralize = require('pluralize')
 
-const r = (arr) => arr[Math.floor(Math.random() * arr.length)]
+const randomInArray = (arr) => arr[Math.floor(Math.random() * arr.length)]
 const uniq = (arr) => arr.filter((value, i, self) => self.indexOf(value) === i)
 
 const maybe = (word, weight) => Math.random() < weight ? word : ''
@@ -11,7 +11,8 @@ const maybe = (word, weight) => Math.random() < weight ? word : ''
 const upper = (str) => str[0].toUpperCase() + str.slice(1)
 const upperAll = (str) => str.trim().split(' ').map(upper).join(' ').split('-').map(upper).join('-')
 
-const weighted = (weights) => {
+
+const makeWeightedGetter = (weights) => {
   const totalWeight = weights.reduce((p, c) => p + c[1], 0)
 
   let lastWeight = 0
@@ -102,12 +103,12 @@ const corpora = {
   vegetables: require('./corpora/data/foods/vegetables').vegetables
 }
 
-for(const c in corpora) {
+for(const c in corpora) { //eslint-disable-line guard-for-in
   // console.log(c + ' ' + corpora[c].length)
   corpora[c] = corpora[c].map(upperAll)
 }
 
-const getArticle = weighted(
+const getArticle = makeWeightedGetter(
   [
     ['The', 1],
     ['Los', 0.07],
@@ -116,7 +117,7 @@ const getArticle = weighted(
 )
 
 
-const getDescriptor = weighted(
+const getDescriptor = makeWeightedGetter(
   [
     [corpora.adjectives, 1.3],
     [corpora.colors, 0.8],
@@ -131,7 +132,7 @@ const getDescriptor = weighted(
   ]
 )
 
-const getName = weighted(
+const getName = makeWeightedGetter(
   [
     [corpora.animals, 1],
     [corpora.appliances, 0.1],
@@ -146,20 +147,62 @@ const getName = weighted(
   ]
 )
 
-const gangName = () => {
-  const descriptor = maybe(r(getDescriptor()), 0.86)
+const getPlaceType = makeWeightedGetter(
+  [
+    ['Street', 1.3],
+    ['Lane', 0.7],
+    ['Alley', 1],
+    ['Drive', 0.6],
+    ['City', 0.5]
+  ]
+)
 
-  const name = maybe(
-    pluralize(r(getName())),
-    descriptor.length > 0 ? 0.95 : 1
+const getGangType = makeWeightedGetter(
+  [
+    ['Gang', 1.2],
+    ['Club', 0.5],
+    ['Society', 0.7],
+    ['Mafia', 0.4],
+    ['Boys', 1.4],
+    ['Girls', 0.3],
+    ['Lads', 0.5],
+    ['Lords', 0.8],
+    ['Ladies', 0.2],
+    ['Lasses', 0.2]
+  ]
+)
+
+const gangName = () => {
+  const descriptor = maybe(randomInArray(getDescriptor()), 0.8)
+
+  let name = maybe(
+    randomInArray(getName()),
+    descriptor.length > 0 ? 0.9 : 1
   )
+
+  const placeType = maybe(
+     maybe(
+       randomInArray([randomInArray(getDescriptor()), randomInArray(getName())]) + ' ',
+       descriptor.length > 0 ? 0.16 : 0.98
+     ) + getPlaceType(),
+     descriptor.length > 0 ? 0.3 : 0.64
+  )
+
+  const gangType = maybe(
+    getGangType(),
+    name.length > 0 ? 0.7 : 0.85
+  )
+
+  if(gangType.length === 0 && name.length > 0) {
+    name = pluralize(name)
+  }
 
   const article = maybe(
     getArticle(),
     descriptor.length > 0 && name.length > 0 ? 0.9 : 0.96
   )
 
-  return [article, descriptor, name]
+  return [article, descriptor + ' ' + placeType, name + ' ' + gangType]
 }
 
 if(typeof window !== 'undefined') {
