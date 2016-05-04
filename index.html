@@ -131,21 +131,26 @@
     gName = gangName();
 
     //Use the bigger font size if words are missing
-    if(gName[2] === '') {
+    if(gName[2].length === 0) {
       gName[2] = gName[1];
       gName[1] = gName[0];
       gName[0] = '';
     }
-    else if(gName[1] === '') {
+    if(gName[1].length === 0) {
       gName[1] = gName[0];
       gName[0] = '';
     }
 
-    col = Please.make_color({saturation: 1});
+    //If the descriptor is long, make sure it wraps
+    sm.style.whiteSpace = (gName[1].split(' ').length > 2 && gName[1].length > 14) || (gName[1].length > 24) ? 'normal' : 'nowrap'
 
+    //Set text
     xs.innerHTML = gName[0];
     sm.innerHTML = gName[1];
     lg.innerHTML = gName[2];
+
+    //Set new colour
+    col = Please.make_color({saturation: 1});
     setColor(col);
   }
 
@@ -156,11 +161,14 @@
 
     var h = hist.pop();
     gName = h.name;
-    col = h.col;
+
+    sm.style.whiteSpace = (gName[1].split(' ').length > 2 && gName[1].length > 14) || (gName[1].length > 24) ? 'normal' : 'nowrap'
 
     xs.innerHTML = gName[0];
     sm.innerHTML = gName[1];
     lg.innerHTML = gName[2];
+
+    col = h.col;
     setColor(col);
   }
 

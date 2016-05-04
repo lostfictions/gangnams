@@ -111,8 +111,8 @@ for(const c in corpora) { //eslint-disable-line guard-for-in
 const getArticle = makeWeightedGetter(
   [
     ['The', 1],
-    ['Los', 0.07],
-    ['Les', 0.03]
+    ['Los', 0.03],
+    ['Les', 0.005]
   ]
 )
 
@@ -162,13 +162,15 @@ const getGangType = makeWeightedGetter(
     ['Gang', 1.2],
     ['Club', 0.5],
     ['Society', 0.7],
-    ['Mafia', 0.4],
+    ['Mafia', 0.3],
     ['Boys', 1.4],
     ['Girls', 0.3],
     ['Lads', 0.5],
-    ['Lords', 0.8],
+    ['Lords', 0.6],
     ['Ladies', 0.2],
-    ['Lasses', 0.2]
+    ['Lasses', 0.2],
+    ['Kids', 0.7],
+    ['Tribe', 0.7]
   ]
 )
 
@@ -180,17 +182,29 @@ const gangName = () => {
     descriptor.length > 0 ? 0.9 : 1
   )
 
+  const placeTypeBeforeDescriptor = Math.random() > 0.97
+  let placeTypeExtraDescriptorChance = 0
+  if(placeTypeBeforeDescriptor) {
+    placeTypeExtraDescriptorChance = 1
+  }
+  else if(descriptor.length > 0) {
+    placeTypeExtraDescriptorChance = 0.03
+  }
+  else {
+    placeTypeExtraDescriptorChance = 0.98
+  }
+
   const placeType = maybe(
      maybe(
        randomInArray([randomInArray(getDescriptor()), randomInArray(getName())]) + ' ',
-       descriptor.length > 0 ? 0.16 : 0.98
+       placeTypeExtraDescriptorChance
      ) + getPlaceType(),
-     descriptor.length > 0 ? 0.3 : 0.64
+     descriptor.length > 0 ? 0.18 : 0.64
   )
 
   const gangType = maybe(
     getGangType(),
-    name.length > 0 ? 0.7 : 0.85
+    name.length > 0 ? 0.65 : 0.89
   )
 
   if(gangType.length === 0 && name.length > 0) {
@@ -202,7 +216,13 @@ const gangName = () => {
     descriptor.length > 0 && name.length > 0 ? 0.9 : 0.96
   )
 
-  return [article, descriptor + ' ' + placeType, name + ' ' + gangType]
+  const finalName = [
+    article,
+    placeTypeBeforeDescriptor ? placeType + ' ' + descriptor : descriptor + ' ' + placeType,
+    name + ' ' + gangType
+  ]
+
+  return finalName.map(n => n.trim())
 }
 
 if(typeof window !== 'undefined') {
