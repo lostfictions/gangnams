@@ -45,10 +45,22 @@
       font-variant:small-caps;
       transform: skew(-15deg,-15deg);
       padding: 25vmin 20vmin;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       text-align: center;
+      background: black;
+      color: white;
+      -webkit-filter:url(#bloor);
+      filter:url(#bloor);
+    }
+
+    .victory::before {
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      bottom: 1px;
+      left: 1px;
+      pointer-events: none;
+      content: '';
+      mix-blend-mode: multiply;
     }
 
     .victory .xs {
@@ -75,6 +87,7 @@
       position: absolute;
       right: 10px;
       bottom: 10px;
+      z-index: 1;
     }
 
     .btn {
@@ -109,18 +122,32 @@
       <span class="lg"></span>
     </h1>
   </div>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="0" height="0">
+    <defs>
+      <filter id="bloor" x="0" y="0">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="13" result="blur"/>
+        <feBlend in2="blur" in="SourceGraphic" mode="screen"/>
+      </filter>
+    </defs>
+  </svg>
 </body>
 
 <script src="Please.js"></script>
 <script src="bundle.js"></script>
 <script>
+  var s = document.createElement("style");
+  document.head.appendChild(s);
+  var gradientStyles = s.sheet;
+  gradientStyles.insertRule('dummy { }', 0);
+
+
+  //Undo history
   var hist = [];
 
+  //Elements for text replacement
   var xs = document.querySelector('.victory .xs');
   var sm = document.querySelector('.victory .sm');
   var lg = document.querySelector('.victory .lg');
-
-  var styleParent = document.querySelector('.victory');
 
   var gName = [];
   var col = '';
@@ -173,8 +200,8 @@
   }
 
   function setColor(color) {
-    styleParent.style.webkitFilter = 'drop-shadow(1vmin 1vmin 5vmin ' + color + ')';
-    styleParent.style.backgroundImage = 'linear-gradient(' + color + ' 40%,  #F9F9F7 70%)';
+    gradientStyles.deleteRule(0);
+    gradientStyles.insertRule('.victory::before { background: linear-gradient(' + color + ' 40%,  #F9F9F7 80%)', 0);
   }
 
   var b = document.querySelector('#another');
