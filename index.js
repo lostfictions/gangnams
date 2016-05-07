@@ -303,7 +303,7 @@ else {
 
     function setColor(color) {
       gradientStyles.deleteRule(0)
-      gradientStyles.insertRule('.fancy.cssgradients .victory::before { background: linear-gradient(' + color + ' 40%,  #F9F9F7 80%); }', 0)
+      gradientStyles.insertRule('.fancy.cssgradients.backgroundblendmode .victory::before { background: linear-gradient(' + color + ' 40%,  #F9F9F7 80%); }', 0)
     }
 
     const b = document.querySelector('#another')
