@@ -2,7 +2,6 @@
 'use strict' //needed if running in node without transcode
 
 const pluralize = require('pluralize')
-const domready = require('domready')
 const please = require('pleasejs')
 
 const randomInArray = (arr) => arr[Math.floor(Math.random() * arr.length)]
@@ -231,7 +230,7 @@ if(typeof window === 'undefined') {
   console.log(gangName().join(' '))
 }
 else {
-  domready(function() {
+  require('domready')(function() {
     //Create stylesheet for changing colour
     const s = document.createElement("style")
     document.head.appendChild(s)
