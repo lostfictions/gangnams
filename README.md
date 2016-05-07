@@ -2,6 +2,7 @@
 
 Make some cool gang names.
 
+![The Esoteric Mongoose Lads](screenshot1.jpg)![The Fresno Scarcity Gang](screenshot2.jpg)
 
 ## Notes
 
