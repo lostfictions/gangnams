@@ -2,6 +2,8 @@
 'use strict' //needed if running in node without transcode
 
 const pluralize = require('pluralize')
+const domready = require('domready')
+const please = require('pleasejs')
 
 const randomInArray = (arr) => arr[Math.floor(Math.random() * arr.length)]
 const uniq = (arr) => arr.filter((value, i, self) => self.indexOf(value) === i)
@@ -225,9 +227,96 @@ const gangName = () => {
   return finalName.map(n => n.trim())
 }
 
-if(typeof window !== 'undefined') {
-  window.gangName = gangName
+if(typeof window === 'undefined') {
+  console.log(gangName().join(' '))
 }
 else {
-  console.log(gangName().join(' '))
+  domready(function() {
+    //Create stylesheet for changing colour
+    const s = document.createElement("style")
+    document.head.appendChild(s)
+    const gradientStyles = s.sheet
+    gradientStyles.insertRule('dummy { }', 0)
+
+    //Undo history
+    const history = []
+
+    //Elements for text replacement
+    const xs = document.querySelector('.victory .xs')
+    const sm = document.querySelector('.victory .sm')
+    const lg = document.querySelector('.victory .lg')
+
+    let name = []
+    let col = ''
+
+    function newName() {
+      history.push({ name: name, col: col })
+
+      name = gangName()
+
+      //Use the bigger font size if words are missing
+      if(name[2].length === 0) {
+        name[2] = name[1]
+        name[1] = name[0]
+        name[0] = ''
+      }
+      if(name[1].length === 0) {
+        name[1] = name[0]
+        name[0] = ''
+      }
+
+      //If the descriptor is long, make sure it wraps
+      sm.style.whiteSpace =
+        (name[1].split(' ').length > 2 && name[1].length > 14) || (name[1].length > 24)
+          ? 'normal'
+          : 'nowrap'
+
+      //Set text
+      xs.innerHTML = name[0]
+      sm.innerHTML = name[1]
+      lg.innerHTML = name[2]
+
+      //Set new colour
+      col = please.make_color({saturation: 1})
+      setColor(col)
+    }
+
+    function undo() {
+      if(history.length <= 1) {
+        return
+      }
+
+      const h = history.pop()
+      name = h.name
+
+      sm.style.whiteSpace =
+        (name[1].split(' ').length > 2 && name[1].length > 14) || (name[1].length > 24)
+          ? 'normal'
+          : 'nowrap'
+
+      xs.innerHTML = name[0]
+      sm.innerHTML = name[1]
+      lg.innerHTML = name[2]
+
+      col = h.col
+      setColor(col)
+    }
+
+    function setColor(color) {
+      gradientStyles.deleteRule(0)
+      gradientStyles.insertRule('.fancy.cssgradients .victory::before { background: linear-gradient(' + color + ' 40%,  #F9F9F7 80%); }', 0)
+    }
+
+    const b = document.querySelector('#another')
+    b.onclick = function(e) { e.preventDefault(); newName() }
+
+    const u = document.querySelector('#undo')
+    u.onclick = function(e) { e.preventDefault(); undo() }
+
+    const p = document.querySelector('#plain')
+    const htmlEl = document.querySelector('html').classList
+    p.onclick = function(e) { e.preventDefault(); htmlEl.toggle('fancy') }
+
+    newName()
+  })
 }

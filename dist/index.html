@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" class="fancy">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Gang Nams</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+  <div class="helper">
+    <a class="btn btn-sm" id="plain" href="#">Toggle Plain</a>
+    <a class="btn btn-sm" id="undo" href="#">Undo</a>
+    <a class="btn btn-lg" id="another" href="#">Another!</a>
+  </div>
+  <div id="wrapper">
+    <h1 class="victory">
+      <span class="xs"></span>
+      <span class="sm"></span>
+      <span class="lg"></span>
+    </h1>
+  </div>
+  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="0" height="0">
+    <defs>
+      <filter id="bloor" x="0" y="0">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="13" result="blur"/>
+        <feBlend in2="blur" in="SourceGraphic" mode="screen"/>
+      </filter>
+    </defs>
+  </svg>
+</body>
+<script src="modernizr-custom.js"></script>
+<script src="bundle.js"></script>
+
+</html>
